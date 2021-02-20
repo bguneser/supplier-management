@@ -9,13 +9,13 @@ interface CompanyService {
 
     fun saveCompany(companyDto: Company) : Company
 
-    fun deleteCompany(id : Long)
+    fun deleteCompany(companyId : Long): Optional<Company>
 
     fun retrieveAllCompanies() : MutableList<Company>
 
     fun findByCompanyName(companyName : String) : Optional<Company>
 
-    fun findById(id : Long): Optional<Company>
+    fun findByCompanyId(id : Long): Optional<Company>
 
 
 }

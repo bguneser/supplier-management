@@ -2,7 +2,6 @@ package com.togg.suppliermanagement.controller
 
 
 import com.togg.suppliermanagement.entity.Company
-import com.togg.suppliermanagement.repo.CompanyRepository
 import com.togg.suppliermanagement.service.CompanyService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
@@ -40,7 +39,13 @@ class CompanyController {
     @GetMapping("/company/{id}")
     @ApiOperation(value = "Id'ye göre company getirir", notes = "Id'ye göre company getirir")
     fun findById(@PathVariable("id") id :Long ): Optional<Company> {
-        return companyService.findById(id)
+        return companyService.findByCompanyId(id)
+    }
+
+    @GetMapping("/deleteCompany/{id}")
+    @ApiOperation(value = "Id'ye göre company'i siler", notes = "Id'ye göre company'i siler")
+    fun deleteById(@PathVariable("id") companyId :Long ): Optional<Company> {
+        return companyService.deleteCompany(companyId)
     }
 
 

@@ -1,7 +1,6 @@
 package com.togg.suppliermanagement.entity
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo
-import com.fasterxml.jackson.annotation.JsonIdentityReference
 import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import java.io.Serializable
 import javax.persistence.*
@@ -25,7 +24,7 @@ data class Company(@Id
                    var notes: String = "",
 
                    @Column(name ="uvp")
-                   var uvp : String ="",
+                   var uvp: String ="",
 
                    @Enumerated
                    @Column(name = "company_progression")
@@ -38,7 +37,9 @@ data class Company(@Id
                    var ecosystemLayers: MutableList<EcosystemLayer> = mutableListOf(),
 
                    @ManyToMany(targetEntity = UserJourney::class, cascade = arrayOf(CascadeType.ALL))
-                   var userJourneys: MutableList<UserJourney> = mutableListOf()) : Serializable {
+                   var userJourneys: MutableList<UserJourney> = mutableListOf(),
+                   @ManyToOne( cascade= arrayOf(CascadeType.ALL))
+                   var country: Country? = null) : Serializable {
 
     companion object {
 

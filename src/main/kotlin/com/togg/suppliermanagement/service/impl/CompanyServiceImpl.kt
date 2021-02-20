@@ -22,15 +22,17 @@ class CompanyServiceImpl : CompanyService {
         company.companyProgression = companyDto.companyProgression
         company.isNDAavailable = companyDto.isNDAavailable
         company.uvp=companyDto.uvp
+        company.country=companyDto.country
         company.ecosystemLayers = companyDto.ecosystemLayers
         company.userJourneys = companyDto.userJourneys
 
         return companyRepository.save(company)
     }
 
-    override fun deleteCompany(id: Long) {
-
-
+    override fun deleteCompany(companyId: Long) : Optional<Company> {
+        val deletedCompany = findByCompanyId(companyId)
+        companyRepository.deleteById(companyId)
+        return deletedCompany
     }
     override fun retrieveAllCompanies(): MutableList<Company> {
         return companyRepository.findAll()
@@ -40,7 +42,7 @@ class CompanyServiceImpl : CompanyService {
         return companyRepository.findByCompanyName(companyName)
     }
 
-    override fun findById(id: Long): Optional<Company> {
+    override fun findByCompanyId(id: Long): Optional<Company> {
         return companyRepository.findById(id)
     }
 

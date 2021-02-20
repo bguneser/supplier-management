@@ -33,6 +33,7 @@ class ReportServiceImpl : ReportService {
                 report.notes=company.notes
                 report.uvp=company.uvp
                 report.productDescription=company.productDescription
+                report.companyName=company.companyName
                 reportList.add(report)
             }
         }
