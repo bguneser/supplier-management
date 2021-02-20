@@ -1,7 +1,8 @@
 package com.togg.suppliermanagement.controller
 
-import com.togg.suppliermanagement.dto.CompanyDto
+
 import com.togg.suppliermanagement.entity.Company
+import com.togg.suppliermanagement.repo.CompanyRepository
 import com.togg.suppliermanagement.service.CompanyService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
@@ -26,15 +27,22 @@ class CompanyController {
 
     @PostMapping("/saveCompany")
     @ApiOperation(value = "Yeni Company Ekleme metodu", notes = "Geriye eklediğin company'i döndürecek")
-    fun saveCompany(@RequestBody companyDto: CompanyDto): ResponseEntity<CompanyDto> {
-        return ResponseEntity.ok(companyService.saveCompany(companyDto))
+    fun saveCompany(@RequestBody company: Company): ResponseEntity<Company> {
+        return ResponseEntity.ok(companyService.saveCompany(company))
     }
 
     @GetMapping("/{companyName}")
     @ApiOperation(value = "Company ismine göre company'e ait bilgileri getirir", notes = "Company ismine göre company'e ait bilgileri getirir")
-    fun findByComPanyName(@PathVariable("companyName") companyName :String ): Optional<Company> {
+    fun findByCompanyName(@PathVariable("companyName") companyName :String ): Optional<Company> {
         return companyService.findByCompanyName(companyName)
     }
+
+    @GetMapping("/company/{id}")
+    @ApiOperation(value = "Id'ye göre company getirir", notes = "Id'ye göre company getirir")
+    fun findById(@PathVariable("id") id :Long ): Optional<Company> {
+        return companyService.findById(id)
+    }
+
 
 
 }

@@ -1,18 +1,21 @@
 package com.togg.suppliermanagement.entity
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.*
 import java.io.Serializable
 import javax.persistence.*
 
 @Entity
 @Table(name = "ecosystem_layer")
-@JsonIgnoreProperties("hibernateLazyInitializer", "handler",  "companies")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator::class,property = "id")
 data class EcosystemLayer(@Id
-                           @SequenceGenerator(name = "seq_company_ecosystemLayer",allocationSize = 1)
-                           @GeneratedValue(generator = "seq_company_ecosystemLayer",strategy = GenerationType.SEQUENCE) var id : Long =-1,
-                          @Column(name = "ecosystem_layer_name") var ecosystemLayerName: String = "",
-                          @ManyToMany(fetch = FetchType.LAZY,cascade = arrayOf(CascadeType.ALL), mappedBy = "ecosystemLayers")
-                          var companies : MutableSet<Company> = mutableSetOf<Company>()) : Serializable {
+                          @GeneratedValue(strategy = GenerationType.IDENTITY)
+                          var id : Long=-1,
+
+                          @Column(name = "ecosystem_layer_name")
+                          var ecosystemLayerName: String = "",
+
+                          @ManyToMany(targetEntity=Company::class,cascade = arrayOf(CascadeType.ALL),mappedBy = "ecosystemLayers")
+                          var companies : MutableList<Company> = mutableListOf()) : Serializable {
 
 
     override fun toString(): String {
