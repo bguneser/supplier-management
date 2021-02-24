@@ -1,5 +1,6 @@
 package com.togg.suppliermanagement.service
 
+import com.togg.suppliermanagement.Dto.CompanyDto
 import com.togg.suppliermanagement.entity.Company
 import org.springframework.stereotype.Service
 import java.util.*
@@ -9,13 +10,15 @@ interface CompanyService {
 
     fun saveCompany(companyDto: Company) : Company
 
-    fun deleteCompany(companyId : Long): Optional<Company>
+    fun deleteCompany(companyId : Long):CompanyDto
 
     fun retrieveAllCompanies() : MutableList<Company>
 
     fun findByCompanyName(companyName : String) : Optional<Company>
 
-    fun findByCompanyId(id : Long): Optional<Company>
+    fun findCompanyByCompanyId(id : Long): CompanyDto
+
+    fun getCompaniesByEcosystemLayerId(ecosystemLayerId : Long) :MutableList<CompanyDto>
 
 
 }

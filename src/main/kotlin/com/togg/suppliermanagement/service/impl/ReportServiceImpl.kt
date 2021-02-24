@@ -6,7 +6,6 @@ import com.togg.suppliermanagement.repo.CompanyRepository
 import com.togg.suppliermanagement.service.EcosystemLayerService
 import com.togg.suppliermanagement.service.ReportService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 @Service
@@ -26,7 +25,7 @@ class ReportServiceImpl : ReportService {
             company ->
             ecosystemLayerService.findEcosystemIdsByCompanyId(company.id).forEach { id ->
                 val report = Report()
-                report.ecosystemLayerName=ecosystemLayerService.findById(id).get().ecosystemLayerName
+                report.ecosystemLayerName=ecosystemLayerService.findEcosystemLayerById(id).get().ecosystemLayerName
                 report.companyName=company.companyName
                 report.companyProgression= Company.getCompanyProgressionStatusById(company.id)!!.statusName
                 report.isNDAavailable=company.isNDAavailable

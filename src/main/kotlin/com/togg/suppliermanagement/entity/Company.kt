@@ -1,6 +1,7 @@
 package com.togg.suppliermanagement.entity
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import java.io.Serializable
 import javax.persistence.*
@@ -13,7 +14,7 @@ data class Company(@Id
                    @GeneratedValue(strategy = GenerationType.IDENTITY)
                    var id: Long = -1,
 
-                   @Column(name = "company_name", unique = true)
+                   @Column(name = "company_name")
                    @NotBlank(message = "Company name can't be blank")
                    var companyName: String = "",
 

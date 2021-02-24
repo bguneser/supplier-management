@@ -12,9 +12,10 @@ import javax.persistence.*
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator::class,property = "id")
 class UserJourney(@Id
                   @GeneratedValue(strategy = GenerationType.IDENTITY)
-                  var id: Long,
+                  var id: Long=-1,
 
-                  @Column(name = "user_journey_name") var userJourneyName: String = "",
+                  @Column(name = "user_journey_name")
+                  var userJourneyName: String = "",
                   @ManyToMany(targetEntity=Company::class,cascade = arrayOf(CascadeType.ALL),mappedBy = "userJourneys")
                   var companies : MutableList<Company> = mutableListOf()) : Serializable {
 

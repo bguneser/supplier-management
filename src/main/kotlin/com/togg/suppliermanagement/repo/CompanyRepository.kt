@@ -12,4 +12,5 @@ interface CompanyRepository : JpaRepository<Company,Long> {
     fun findByCompanyName(companyName : String) : Optional<Company>
 
 
+
 }
