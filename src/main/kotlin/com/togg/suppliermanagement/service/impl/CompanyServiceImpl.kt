@@ -110,6 +110,7 @@ class CompanyServiceImpl : CompanyService {
         companyDto.countryName = company.countryName
         companyDto.productDescription = company.productDescription
         companyDto.ecosystemLayer.ecosystemLayerName=company.ecosystemLayer.ecosystemLayerName
+        companyDto.userJourneyName=company.userJourneyName
         companyDto.ecosystemLayer.id=company.ecosystemLayer.id
 
         return companyDto
