@@ -29,9 +29,15 @@ class CompanyController {
 
     @PostMapping(value = arrayOf("/saveCompany"),produces = arrayOf(MediaType.APPLICATION_JSON_VALUE))
     @ApiOperation(value = "Yeni Company Ekleme metodu", notes = "Geriye eklediğin company'i döndürecek")
-    fun saveCompany(@RequestBody company: Company): ResponseEntity<Company> {
-        return ResponseEntity.ok(companyService.saveCompany(company))
+    fun saveCompany(@RequestBody companyDto: CompanyDto): ResponseEntity<Company> {
+        return ResponseEntity.ok(companyService.saveCompany(companyDto))
     }
+
+    @PutMapping ("/updateCompany/{id}")
+    fun updateCompany(@RequestBody company : Company, @PathVariable id:Long): Company {
+        return companyService.updateCompany(company,id)
+    }
+
 
     @GetMapping("/getCompanyByCompanyName/{companyName}",produces = arrayOf(MediaType.APPLICATION_JSON_VALUE))
     @ApiOperation(value = "Company ismine göre company'e ait bilgileri getirir", notes = "Company ismine göre company'e ait bilgileri getirir")
@@ -45,7 +51,7 @@ class CompanyController {
         return companyService.findCompanyByCompanyId(companyId)
     }
 
-    @GetMapping("/deleteCompanyByCompanyId/{companyId}",produces = arrayOf(MediaType.APPLICATION_JSON_VALUE))
+    @DeleteMapping("/deleteCompanyByCompanyId/{companyId}",produces = arrayOf(MediaType.APPLICATION_JSON_VALUE))
     @ApiOperation(value = "Id'ye göre company'i siler", notes = "Id'ye göre company'i siler")
     fun deleteById(@PathVariable("companyId") companyId :Long ):CompanyDto {
         return companyService.deleteCompany(companyId)

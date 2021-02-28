@@ -8,9 +8,11 @@ import java.util.*
 @Service
 interface CompanyService {
 
-    fun saveCompany(companyDto: Company) : Company
+    fun saveCompany(companyDto: CompanyDto) : Company
 
     fun deleteCompany(companyId : Long):CompanyDto
+
+    fun updateCompany(company : Company, companyId: Long) : Company
 
     fun retrieveAllCompanies() : MutableList<Company>
 

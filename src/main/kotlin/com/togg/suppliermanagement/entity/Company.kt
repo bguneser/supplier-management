@@ -1,7 +1,6 @@
 package com.togg.suppliermanagement.entity
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import java.io.Serializable
 import javax.persistence.*
@@ -24,8 +23,8 @@ data class Company(@Id
                    @Column(name = "notes")
                    var notes: String = "",
 
-                   @Column(name ="uvp")
-                   var uvp: String ="",
+                   @Column(name = "uvp")
+                   var uvp: String = "",
 
                    @Enumerated
                    @Column(name = "company_progression")
@@ -34,13 +33,13 @@ data class Company(@Id
                    @Column(name = "is_nda_available")
                    var isNDAavailable: Boolean = false,
 
-                   @ManyToMany(targetEntity = EcosystemLayer::class,cascade = arrayOf(CascadeType.ALL))
-                   var ecosystemLayers: MutableList<EcosystemLayer> = mutableListOf(),
+                   var countryName: String = "",
 
-                   @ManyToMany(targetEntity = UserJourney::class, cascade = arrayOf(CascadeType.ALL))
-                   var userJourneys: MutableList<UserJourney> = mutableListOf(),
-                   @ManyToOne( cascade= arrayOf(CascadeType.ALL))
-                   var country: Country? = null) : Serializable {
+                   @Column(name = "user_journey")
+                   var userJourneyName: String = "",
+
+                   @ManyToOne(fetch = FetchType.LAZY)
+                   var ecosystemLayer: EcosystemLayer = EcosystemLayer()) : Serializable {
 
     companion object {
 
@@ -53,21 +52,16 @@ data class Company(@Id
     }
 
     enum class CompanyProgressionStatus(var id: Long, var statusName: String) {
-        REJECT(1,"REJECT"),
-        NoTouch(2,"NoTouch"),
-        Collaboration(3,"Collaboration"),
-        Rejected( 4,"Rejected"),
-        FirstMeeting( 5,"FirstMeeting"),
-        SecondMeeting(6,"SecondMeeting"),
-        Finalized(7,"Finalized"),
-        UNKNOWN(8,"UNKNOWN")
+        REJECT(1, "REJECT"),
+        NoTouch(2, "NoTouch"),
+        Collaboration(3, "Collaboration"),
+        Rejected(4, "Rejected"),
+        FirstMeeting(5, "FirstMeeting"),
+        SecondMeeting(6, "SecondMeeting"),
+        Finalized(7, "Finalized"),
+        UNKNOWN(8, "UNKNOWN")
 
 
-    }
-
-
-    override fun toString(): String {
-        return "{company:${this.companyName},ecosystemLayers: ${ecosystemLayers.map { it->it.ecosystemLayerName }}}"
     }
 
 

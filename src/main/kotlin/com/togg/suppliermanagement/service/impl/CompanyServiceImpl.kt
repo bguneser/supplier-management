@@ -1,18 +1,19 @@
 package com.togg.suppliermanagement.service.impl
 
 import com.togg.suppliermanagement.Dto.CompanyDto
-import com.togg.suppliermanagement.Dto.EcoSystemLayerDto
 import com.togg.suppliermanagement.entity.Company
-import com.togg.suppliermanagement.entity.EcosystemLayer
-import com.togg.suppliermanagement.entity.UserJourney
 import com.togg.suppliermanagement.repo.CompanyRepository
 import com.togg.suppliermanagement.repo.EcosystemLayerRepository
-import com.togg.suppliermanagement.repo.UserJourneyRepository
 import com.togg.suppliermanagement.service.CompanyService
+import com.togg.suppliermanagement.service.EcosystemLayerService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.server.ResponseStatusException
 import java.util.*
+
 
 @Service
 class CompanyServiceImpl : CompanyService {
@@ -23,81 +24,70 @@ class CompanyServiceImpl : CompanyService {
     @Autowired
     lateinit var ecosystemLayerRepository: EcosystemLayerRepository
 
-
-    @Autowired
-    lateinit var userJourneyRepository: UserJourneyRepository
-
-    override fun saveCompany(companyDto: Company): Company {
+    override fun saveCompany(companyDto: CompanyDto): Company {
 
         val company = Company()
 
-        if(companyRepository.findByCompanyName(companyDto.companyName).isPresent){
-            throw  Exception()
+        val companyNames = mutableListOf<String>()
+
+        getCompaniesByEcosystemLayerId(companyDto.ecosystemLayer.id).forEach { it -> companyNames.add(it.companyName)
+        }
+
+        if(companyNames.contains(companyDto.companyName.toUpperCase())) {
+
+            throw ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Company already exist")
+
         } else {
 
-            companyDto.ecosystemLayers.forEach {
-                it ->
-                if(ecosystemLayerRepository.findByEcosystemLayerName(it.ecosystemLayerName).isPresent){
-                    company.ecosystemLayers.add(ecosystemLayerRepository.findByEcosystemLayerName(it.ecosystemLayerName).get())
-                } else {
-                    val ecosystemLayer= EcosystemLayer()
-                    ecosystemLayer.ecosystemLayerName=it.ecosystemLayerName
-                    company.ecosystemLayers.add(ecosystemLayer)
-                }
-            }
+            company.ecosystemLayer.id = companyDto.ecosystemLayer.id
+            company.ecosystemLayer.ecosystemLayerName = companyDto.ecosystemLayer.ecosystemLayerName
+            company.ecosystemLayer.companies.add(company)
+            company.companyName = companyDto.companyName.toUpperCase()
+            company.productDescription = companyDto.productDescription
+            company.notes = companyDto.notes
+            company.companyProgression = companyDto.companyProgression
+            company.isNDAavailable = companyDto.isNDAavailable
+            company.uvp = companyDto.uvp
+            company.userJourneyName=companyDto.userJourneyName
+            company.countryName = companyDto.countryName
 
-            companyDto.userJourneys.forEach {
-                it->
-                if(userJourneyRepository.findUserJourneyByUserJourneyName(it.userJourneyName).isPresent()){
-                    company.userJourneys.add(userJourneyRepository.findUserJourneyByUserJourneyName(it.userJourneyName).get())
-                } else {
-                    val userJourney = UserJourney()
-                    userJourney.userJourneyName=it.userJourneyName
-                    company.userJourneys.add(userJourney)
-                }
-            }
+            val savedCompany = companyRepository.save(company)
+            company.id = savedCompany.id
 
-
+            return savedCompany
 
         }
 
 
-        company.companyName = companyDto.companyName.toUpperCase()
-        company.productDescription = companyDto.productDescription
-        company.notes = companyDto.notes
-        company.companyProgression = companyDto.companyProgression
-        company.isNDAavailable = companyDto.isNDAavailable
-        company.uvp=companyDto.uvp
-        company.country=companyDto.country
 
-
-        //company.ecosystemLayers = companyDto.ecosystemLayers
-        //company.userJourneys = companyDto.userJourneys
-
-       /* val returnedCompanyDto = CompanyDto()
-        returnedCompanyDto.companyName=company.companyName
-        returnedCompanyDto.countryName=company.country!!.countryName
-        returnedCompanyDto.companyProgression=company.companyProgression
-        returnedCompanyDto.isNDAavailable=company.isNDAavailable
-        returnedCompanyDto.uvp=company.uvp
-        returnedCompanyDto.notes=company.notes
-
-        company.ecosystemLayers.forEach {
-            it ->
-            val ecosystemLayerDto = EcoSystemLayerDto()
-            ecosystemLayerDto.ecosystemLayerName=it.ecosystemLayerName
-            returnedCompanyDto.ecosystemLayers.add(ecosystemLayerDto)
-        }*/
-
-
-        return companyRepository.save(company)
     }
 
-    override fun deleteCompany(companyId: Long) : CompanyDto {
+    override fun deleteCompany(companyId: Long): CompanyDto {
         val deletedCompany = findCompanyByCompanyId(companyId)
         companyRepository.deleteById(companyId)
         return deletedCompany
     }
+
+    @Transactional
+    override fun updateCompany(company: Company, companyId: Long): Company {
+
+            val newCompany = companyRepository.findById(companyId).get()
+            newCompany.userJourneyName=company.userJourneyName
+            newCompany.companyName=company.companyName
+            newCompany.ecosystemLayer=company.ecosystemLayer
+            newCompany.uvp=company.uvp
+            newCompany.isNDAavailable=company.isNDAavailable
+            newCompany.companyProgression=company.companyProgression
+            newCompany.countryName=company.countryName
+            newCompany.notes=company.notes
+
+        val savedCompany = companyRepository.save(newCompany)
+
+        return   savedCompany
+
+    }
+
     override fun retrieveAllCompanies(): MutableList<Company> {
         return companyRepository.findAll()
     }
@@ -109,15 +99,17 @@ class CompanyServiceImpl : CompanyService {
     override fun findCompanyByCompanyId(id: Long): CompanyDto {
 
         val companyDto = CompanyDto()
-        val company =  companyRepository.findById(id).get()
+        val company = companyRepository.findById(id).get()
 
-        companyDto.companyId=company.id
-        companyDto.notes=company.notes
-        companyDto.uvp=company.uvp
-        companyDto.isNDAavailable=company.isNDAavailable
-        companyDto.companyProgression=company.companyProgression
-        companyDto.countryName=company.country!!.countryName
-        companyDto.productDescription=company.productDescription
+        companyDto.companyId = company.id
+        companyDto.notes = company.notes
+        companyDto.uvp = company.uvp
+        companyDto.isNDAavailable = company.isNDAavailable
+        companyDto.companyProgression = company.companyProgression
+        companyDto.countryName = company.countryName
+        companyDto.productDescription = company.productDescription
+        companyDto.ecosystemLayer.ecosystemLayerName=company.ecosystemLayer.ecosystemLayerName
+        companyDto.ecosystemLayer.id=company.ecosystemLayer.id
 
         return companyDto
     }
@@ -129,18 +121,21 @@ class CompanyServiceImpl : CompanyService {
             val companyDto = CompanyDto()
             companyDto.companyId = it.id
             companyDto.companyName = it.companyName
-            companyDto.companyProgression= it.companyProgression
-            companyDto.isNDAavailable=it.isNDAavailable
-            companyDto.productDescription=it.productDescription
-            companyDto.countryName=it.country!!.countryName
-            companyDto.uvp=it.uvp
-            companyDto.notes=it.notes
+            companyDto.companyProgression = it.companyProgression
+            companyDto.isNDAavailable = it.isNDAavailable
+            companyDto.productDescription = it.productDescription
+            companyDto.countryName = it.countryName
+            companyDto.uvp = it.uvp
+            companyDto.notes = it.notes
+            companyDto.ecosystemLayer.id=it.ecosystemLayer.id
+            companyDto.ecosystemLayer.ecosystemLayerName=it.ecosystemLayer.ecosystemLayerName
+            // companyDto.ecosystemLayer.companies=it.ecosystemLayer.companies
 
             companies.add(companyDto)
 
         }
 
 
-       return companies
+        return companies
     }
 }

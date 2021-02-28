@@ -7,14 +7,15 @@ import javax.persistence.*
 @Entity
 @Table(name = "ecosystem_layer")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator::class,property = "id")
+@JsonIgnoreProperties(value = arrayOf("companies"))
 data class EcosystemLayer(@Id
                           @GeneratedValue(strategy = GenerationType.IDENTITY)
                           var id : Long=-1,
 
-                          @Column(name = "ecosystem_layer_name")
+                          @Column(name = "ecosystem_layer_name", unique = true)
                           var ecosystemLayerName: String = "",
 
-                          @ManyToMany(targetEntity=Company::class,cascade = arrayOf(CascadeType.ALL),mappedBy = "ecosystemLayers")
+                          @OneToMany(mappedBy = "ecosystemLayer",targetEntity=Company::class,cascade = arrayOf(CascadeType.PERSIST, CascadeType.DETACH, /*CascadeType.MERGE,*/ CascadeType.REFRESH))
                           var companies : MutableList<Company> = mutableListOf()) : Serializable {
 
 
