@@ -58,7 +58,7 @@ data class Company(@Id
         FirstMeeting(4, "FirstMeeting"),
         SecondMeeting(5, "SecondMeeting"),
         Finalized(6, "Finalized"),
-        Unknown(7, "UNKNOWN")
+        Unknown(7, "Unknown")
 
 
     }

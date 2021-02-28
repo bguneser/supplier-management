@@ -30,10 +30,11 @@ class CompanyServiceImpl : CompanyService {
 
         val companyNames = mutableListOf<String>()
 
-        getCompaniesByEcosystemLayerId(companyDto.ecosystemLayer.id).forEach { it -> companyNames.add(it.companyName)
+        getCompaniesByEcosystemLayerId(companyDto.ecosystemLayer.id).forEach { it ->
+            companyNames.add(it.companyName)
         }
 
-        if(companyNames.contains(companyDto.companyName.toUpperCase())) {
+        if (companyNames.contains(companyDto.companyName.toUpperCase())) {
 
             throw ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Company already exist")
@@ -49,7 +50,7 @@ class CompanyServiceImpl : CompanyService {
             company.companyProgression = companyDto.companyProgression
             company.isNDAavailable = companyDto.isNDAavailable
             company.uvp = companyDto.uvp
-            company.userJourneyName=companyDto.userJourneyName
+            company.userJourneyName = companyDto.userJourneyName
             company.countryName = companyDto.countryName
 
             val savedCompany = companyRepository.save(company)
@@ -58,7 +59,6 @@ class CompanyServiceImpl : CompanyService {
             return savedCompany
 
         }
-
 
 
     }
@@ -72,19 +72,20 @@ class CompanyServiceImpl : CompanyService {
     @Transactional
     override fun updateCompany(company: Company, companyId: Long): Company {
 
-            val newCompany = companyRepository.findById(companyId).get()
-            newCompany.userJourneyName=company.userJourneyName
-            newCompany.companyName=company.companyName
-            newCompany.ecosystemLayer=company.ecosystemLayer
-            newCompany.uvp=company.uvp
-            newCompany.isNDAavailable=company.isNDAavailable
-            newCompany.companyProgression=company.companyProgression
-            newCompany.countryName=company.countryName
-            newCompany.notes=company.notes
+        val newCompany = companyRepository.findById(companyId).get()
+        newCompany.userJourneyName = company.userJourneyName
+        newCompany.companyName = company.companyName
+        newCompany.ecosystemLayer = company.ecosystemLayer
+        newCompany.uvp = company.uvp
+        newCompany.isNDAavailable = company.isNDAavailable
+        newCompany.companyProgression = company.companyProgression
+        newCompany.productDescription = company.productDescription
+        newCompany.countryName = company.countryName
+        newCompany.notes = company.notes
 
         val savedCompany = companyRepository.save(newCompany)
 
-        return   savedCompany
+        return savedCompany
 
     }
 
@@ -102,16 +103,16 @@ class CompanyServiceImpl : CompanyService {
         val company = companyRepository.findById(id).get()
 
         companyDto.companyId = company.id
-        companyDto.companyName=company.companyName
+        companyDto.companyName = company.companyName
         companyDto.notes = company.notes
         companyDto.uvp = company.uvp
         companyDto.isNDAavailable = company.isNDAavailable
         companyDto.companyProgression = company.companyProgression
         companyDto.countryName = company.countryName
         companyDto.productDescription = company.productDescription
-        companyDto.ecosystemLayer.ecosystemLayerName=company.ecosystemLayer.ecosystemLayerName
-        companyDto.userJourneyName=company.userJourneyName
-        companyDto.ecosystemLayer.id=company.ecosystemLayer.id
+        companyDto.ecosystemLayer.ecosystemLayerName = company.ecosystemLayer.ecosystemLayerName
+        companyDto.userJourneyName = company.userJourneyName
+        companyDto.ecosystemLayer.id = company.ecosystemLayer.id
 
         return companyDto
     }
@@ -129,9 +130,9 @@ class CompanyServiceImpl : CompanyService {
             companyDto.countryName = it.countryName
             companyDto.uvp = it.uvp
             companyDto.notes = it.notes
-            companyDto.userJourneyName=it.userJourneyName
-            companyDto.ecosystemLayer.id=it.ecosystemLayer.id
-            companyDto.ecosystemLayer.ecosystemLayerName=it.ecosystemLayer.ecosystemLayerName
+            companyDto.userJourneyName = it.userJourneyName
+            companyDto.ecosystemLayer.id = it.ecosystemLayer.id
+            companyDto.ecosystemLayer.ecosystemLayerName = it.ecosystemLayer.ecosystemLayerName
             // companyDto.ecosystemLayer.companies=it.ecosystemLayer.companies
 
             companies.add(companyDto)
