@@ -102,6 +102,7 @@ class CompanyServiceImpl : CompanyService {
         val company = companyRepository.findById(id).get()
 
         companyDto.companyId = company.id
+        companyDto.companyName=company.companyName
         companyDto.notes = company.notes
         companyDto.uvp = company.uvp
         companyDto.isNDAavailable = company.isNDAavailable
@@ -127,6 +128,7 @@ class CompanyServiceImpl : CompanyService {
             companyDto.countryName = it.countryName
             companyDto.uvp = it.uvp
             companyDto.notes = it.notes
+            companyDto.userJourneyName=it.userJourneyName
             companyDto.ecosystemLayer.id=it.ecosystemLayer.id
             companyDto.ecosystemLayer.ecosystemLayerName=it.ecosystemLayer.ecosystemLayerName
             // companyDto.ecosystemLayer.companies=it.ecosystemLayer.companies

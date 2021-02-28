@@ -47,19 +47,18 @@ data class Company(@Id
             for (e in CompanyProgressionStatus.values()) {
                 if (e.id.equals(id)) return e
             }
-            return CompanyProgressionStatus.UNKNOWN
+            return CompanyProgressionStatus.Unknown
         }
     }
 
     enum class CompanyProgressionStatus(var id: Long, var statusName: String) {
-        REJECT(1, "REJECT"),
-        NoTouch(2, "NoTouch"),
-        Collaboration(3, "Collaboration"),
-        Rejected(4, "Rejected"),
-        FirstMeeting(5, "FirstMeeting"),
-        SecondMeeting(6, "SecondMeeting"),
-        Finalized(7, "Finalized"),
-        UNKNOWN(8, "UNKNOWN")
+        NoTouch(1, "NoTouch"),
+        Collaboration(2, "Collaboration"),
+        Rejected(3, "Rejected"),
+        FirstMeeting(4, "FirstMeeting"),
+        SecondMeeting(5, "SecondMeeting"),
+        Finalized(6, "Finalized"),
+        Unknown(7, "UNKNOWN")
 
 
     }
