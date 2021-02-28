@@ -52,15 +52,13 @@ data class Company(@Id
     }
 
     enum class CompanyProgressionStatus(var id: Long, var statusName: String) {
-        NoTouch(1, "NoTouch"),
-        Collaboration(2, "Collaboration"),
-        Rejected(3, "Rejected"),
-        FirstMeeting(4, "FirstMeeting"),
-        SecondMeeting(5, "SecondMeeting"),
-        Finalized(6, "Finalized"),
-        Unknown(7, "Unknown")
-
-
+        NoTouch(0, "NoTouch"),
+        Collaboration(1, "Collaboration"),
+        Rejected(2, "Rejected"),
+        FirstMeeting(3, "FirstMeeting"),
+        SecondMeeting(4, "SecondMeeting"),
+        Finalized(5, "Finalized"),
+        Unknown(6, "Unknown")
     }
 
 
